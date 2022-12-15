@@ -10,22 +10,21 @@ export default class RecipeBookAPI extends React.Component {
   //set id to mongodb style . using _id
   state = {
     page: "list",
-    data: [
-    ],
+    data: [],
     newRecipeTitle: "", //base holding state for Add New
-    newRecipeIngredients: ""
+    newRecipeIngredients: "",
   };
 
-  BASE_API_URL = "https://simple-recipe-api-v2-vrhs.onrender.com";
+  BASE_API_URL = "https://simple-recipe-v3.onrender.com/recipes";
 
   //part whereby API calls are placed here
-  async componentDidMount(){
+  async componentDidMount() {
     console.log(`ComponentDidMount`);
     const response = await axios.get(`${this.BASE_API_URL}/recipes`);
     console.log(response.data);
     this.setState({
-      data: response.data
-    })
+      data: response.data,
+    });
   }
 
   //function that remembers the visuals
@@ -35,12 +34,14 @@ export default class RecipeBookAPI extends React.Component {
     if (this.state.page === "list") {
       return <AllRecipe recipes={this.state.data} />;
     } else if (this.state.page === "add") {
-      return <AddNew 
-        update={this.updateFormField}
-        title={this.state.newRecipeTitle}
-        ingredients={this.state.newRecipeIngredients}
-        add={this.addNew}
-      />;
+      return (
+        <AddNew
+          update={this.updateFormField}
+          title={this.state.newRecipeTitle}
+          ingredients={this.state.newRecipeIngredients}
+          add={this.addNew}
+        />
+      );
     }
   }
 
@@ -67,24 +68,25 @@ export default class RecipeBookAPI extends React.Component {
     console.log(`Add New Recipe`);
     //base temp recipe
     const newRecipe = {
-        //_id: Math.round(Math.random()* 10000 + 1), //let mongodb give an id
-        title: this.state.newRecipeTitle,
-        ingredients: this.state.newRecipeIngredients.split(",")//split based a comma and insert into an array
-    }
+      //_id: Math.round(Math.random()* 10000 + 1), //let mongodb give an id
+      title: this.state.newRecipeTitle,
+      ingredients: this.state.newRecipeIngredients.split(","), //split based a comma and insert into an array
+    };
 
-    const response = await axios.post(this.BASE_API_URL + "/recipes", newRecipe);
+    const response = await axios.post(
+      this.BASE_API_URL + "/recipes",
+      newRecipe
+    );
     newRecipe._id = response.data.insertedId;
-    
+
     this.setState({
-        data: [...this.state.data, newRecipe],
-        page: "list",
-        newRecipeTitle: "",
-        newRecipeIngredients: "",
-    })
+      data: [...this.state.data, newRecipe],
+      page: "list",
+      newRecipeTitle: "",
+      newRecipeIngredients: "",
+    });
     console.log(`New Recipe Added: ${response.data.insertedId}`);
-
-
-  }
+  };
 
   render() {
     return (
