@@ -15,7 +15,7 @@ export default class RecipeBookAPI extends React.Component {
     newRecipeIngredients: "",
   };
 
-  BASE_API_URL = "https://simple-recipe-v3.onrender.com/recipes";
+  BASE_API_URL = "https://simple-recipe-v3.onrender.com";
 
   //part whereby API calls are placed here
   async componentDidMount() {
